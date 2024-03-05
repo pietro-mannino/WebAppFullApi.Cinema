@@ -7,4 +7,10 @@
         public bool IsDeleted { get; set; } = false;
         public List<ProjectionActivity>? ProjectionActivities { get; set; }
     }
+
+    public class ActivityRoleJson
+    {
+        public string name { get; set; }
+    }
+
 }

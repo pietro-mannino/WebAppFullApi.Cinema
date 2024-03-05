@@ -55,6 +55,20 @@ using(var scope = app.Services.CreateScope())
         }
 
     }
+
+    if (!ctx.ActivityRoles.Any())
+    {
+        List<ActivityRoleJson>? rolejson = JsonSerializer.Deserialize<List<ActivityRoleJson>>(File.ReadAllText("ActivityRole.json"));
+        if (rolejson != null)
+        {
+            List<ActivityRole> toDb = rolejson.Select(g => new ActivityRole()
+            {
+                Description = g.name
+            }).ToList();
+            ctx.ActivityRoles.AddRange(toDb);
+            ctx.SaveChanges();
+        }
+    }
 }
 
 app.UseHttpsRedirection();

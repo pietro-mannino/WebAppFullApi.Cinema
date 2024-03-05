@@ -7,6 +7,6 @@
         public int CleanTimeMins { get; set; }
         public bool IsDeleted { get; set; }
         public List<ItemModel>? Technologies { get; set; }
-        public List<ProjectionModel>? Projections { get; set; }
+        public List<RoomProjectionModel>? Projections { get; set; }
     }
 }

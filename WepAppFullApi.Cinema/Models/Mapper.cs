@@ -40,11 +40,11 @@ namespace WepAppFullApi.Cinema.Models
                 IsDeleted = entity.IsDeleted,
                 ImdbId = entity.ImdbId,
                 Technologies = entity.Technologies?.ConvertAll(MapEntityToModel),
-                Projections = entity.Projections?.ConvertAll(MapEntityToModel)
+                Projections = entity.Projections?.ConvertAll(MapEntityToMovieProjectionModel)
             };
             return model;
         }
-        public MovieProjectionModel MapEntityToModel(Projection entity)
+        public MovieProjectionModel MapEntityToMovieProjectionModel(Projection entity)
         {
             MovieProjectionModel model = new MovieProjectionModel()
             {
@@ -183,8 +183,20 @@ namespace WepAppFullApi.Cinema.Models
                 Name = entity.Name,
                 CleanTimeMins = entity.CleanTimeMins,
                 IsDeleted = entity.IsDeleted,
-                Projections = entity.Projections?.ConvertAll(MapEntityToFullModel),
+                Projections = entity.Projections?.ConvertAll(MapEntityToRoomProjectionModel),
                 Technologies = entity.Technologies?.ConvertAll(MapEntityToModel),
+            };
+            return model;
+        }
+        public RoomProjectionModel MapEntityToRoomProjectionModel(Projection entity)
+        {
+            RoomProjectionModel model = new RoomProjectionModel()
+            {
+                Id = entity.ProjectionId,
+                MovieTitle = entity.Movie?.Title,
+                IsDeleted = entity.IsDeleted,
+                Start = entity.Start,
+                FreeBy = entity.FreeBy
             };
             return model;
         }

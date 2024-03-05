@@ -25,8 +25,8 @@ namespace WepAppFullApi.Cinema.Controllers
         {
             return Ok(_ctx.Rooms
                 .Include(t => t.Technologies)
-                .Include(p => p.Projections)
-                .Where(e => e.IsDeleted == false)
+                .Include(p => p.Projections).ThenInclude(m => m.Movie)
+                .Where(x => x.IsDeleted == false)
                 .ToList()
                 .ConvertAll(_mapper.MapEntityToModel));
         }
@@ -36,6 +36,8 @@ namespace WepAppFullApi.Cinema.Controllers
         public IActionResult GetAllComplete()
         {
             return Ok(_ctx.Rooms
+                .Include(t => t.Technologies)
+                .Include(p => p.Projections).ThenInclude(m => m.Movie)
                 .ToList()
                 .ConvertAll(_mapper.MapEntityToModel));
         }
@@ -45,7 +47,7 @@ namespace WepAppFullApi.Cinema.Controllers
         public IActionResult GetById(int id)
         {
             Room? entity = _ctx.Rooms
-                .Include(p => p.Projections)
+                .Include(p => p.Projections).ThenInclude(m => m.Movie)
                 .Include(t => t.Technologies)
                 .SingleOrDefault(e => e.RoomId == id);
             if (entity == null)

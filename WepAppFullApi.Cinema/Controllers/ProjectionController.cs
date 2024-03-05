@@ -51,7 +51,7 @@ namespace WepAppFullApi.Cinema.Controllers
                  .SingleOrDefault(m => m.ProjectionId == id);
             if (entity == null)
                 return NotFound("Proiezione non trovata");
-            return Ok(_mapper.MapEntityToModel(entity));
+            return Ok(_mapper.MapEntityToFullModel(entity));
         }
 
         [HttpPost]
@@ -60,7 +60,8 @@ namespace WepAppFullApi.Cinema.Controllers
             Projection entity = _mapper.MapModelToEntity(model);
             entity.ProjectionId = 0;
             entity.IsDeleted = false;
-            entity.FreeBy = entity.Start.AddMinutes(entity.Movie.DurationMins + entity.Room.CleanTimeMins);
+            entity.FreeBy = entity.Start;
+            //entity.FreeBy.AddMinutes(model.MovieDurationMins + model.RoomCleaningMins);
             _ctx.Projections.Add(entity);
             return _ctx.SaveChanges() > 0 ?
                 Ok() :
