@@ -11,8 +11,6 @@ namespace WepAppFullApi.Cinema.Models
         public string RoomName { get; set; }
         public DateTime Start { get; set; }
         public DateTime FreeBy { get; set; }
-        //public int MovieDurationMins { get; set; }
-        //public int RoomCleaningMins { get; set; }
         public bool IsDeleted { get; set; }
         public List<ProjectionActivityModel>? Activities { get; set; }
     }

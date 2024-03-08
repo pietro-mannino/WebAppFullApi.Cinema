@@ -60,8 +60,10 @@ namespace WepAppFullApi.Cinema.Controllers
             Projection entity = _mapper.MapModelToEntity(model);
             entity.ProjectionId = 0;
             entity.IsDeleted = false;
-            entity.FreeBy = entity.Start;
-            //entity.FreeBy.AddMinutes(model.MovieDurationMins + model.RoomCleaningMins);
+            entity.FreeBy = entity.Start.AddMinutes(
+                _ctx.Movies.SingleOrDefault(m => m.MovieId == entity.MovieId).DurationMins +
+                _ctx.Rooms.SingleOrDefault(r => r.RoomId == entity.RoomId).CleanTimeMins
+                );
             _ctx.Projections.Add(entity);
             return _ctx.SaveChanges() > 0 ?
                 Ok() :
