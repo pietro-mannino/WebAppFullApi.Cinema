@@ -14,6 +14,17 @@ builder.Services.AddSingleton<Mapper>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+const string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
+var allowedOrigins = builder.Configuration.GetSection("AllowedOrigins").Get<string[]>();
+builder.Services.AddCors(o =>
+{
+    o.AddPolicy(MyAllowSpecificOrigins, b =>
+    {
+        b.WithOrigins(allowedOrigins).AllowAnyMethod().AllowAnyHeader();
+    });
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -72,6 +83,8 @@ using(var scope = app.Services.CreateScope())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors(MyAllowSpecificOrigins);
 
 app.UseAuthorization();
 

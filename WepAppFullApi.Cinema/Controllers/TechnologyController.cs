@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 using WepAppFullApi.Cinema.Data;
 using WepAppFullApi.Cinema.Models;
 
@@ -42,17 +43,17 @@ namespace WepAppFullApi.Cinema.Controllers
         [Route("{id}")]
         public IActionResult GetById(int id)
         {
-            Technology? entity = _ctx.Technologies
+            var entity = _ctx.Technologies
                 .SingleOrDefault(e => e.TechnologyId == id);
             if (entity == null)
-                return NotFound("Tecnologia non trovata");
+                return BadRequest("Tecnologia non trovata");
             return Ok(_mapper.MapEntityToModel(entity));
         }
 
         [HttpPost]
         public IActionResult Post(ItemModel model)
         {
-            Technology entity = _mapper.MapModelToTechnologyEntity(model);
+            var entity = _mapper.MapModelToTechnologyEntity(model);
             entity.TechnologyId = 0;
             entity.IsDeleted = false;
             _ctx.Technologies.Add(entity);
@@ -64,8 +65,10 @@ namespace WepAppFullApi.Cinema.Controllers
         [HttpPut]
         public IActionResult Put(ItemModel model)
         {
-            Technology entity = _mapper.MapModelToTechnologyEntity(model);
+            var entity = _mapper.MapModelToTechnologyEntity(model);
             var toedit = _ctx.Technologies.SingleOrDefault(e => e.TechnologyId == entity.TechnologyId);
+            if (toedit == null)
+                return BadRequest("Tecnologia non trovata");
             toedit.Name = entity.Name;
             toedit.TechnologyType = entity.TechnologyType;
 
@@ -91,7 +94,7 @@ namespace WepAppFullApi.Cinema.Controllers
 
         private IActionResult EnableOrDisable(int id, bool action)
         {
-            Technology? entity = _ctx.Technologies
+            var entity = _ctx.Technologies
                 .SingleOrDefault(m => m.TechnologyId == id);
             if (entity == null)
                 return BadRequest("Tecnologia non trovata");

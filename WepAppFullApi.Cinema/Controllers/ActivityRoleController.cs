@@ -44,7 +44,7 @@ namespace WepAppFullApi.Cinema.Controllers
             ActivityRole? entity = _ctx.ActivityRoles
                 .SingleOrDefault(e => e.ActivityRoleId == id);
             if (entity == null)
-                return NotFound("Ruolo non trovato");
+                return BadRequest("Ruolo non trovato");
             return Ok(_mapper.MapEntityToModel(entity));
         }
 
@@ -65,6 +65,8 @@ namespace WepAppFullApi.Cinema.Controllers
         {
             ActivityRole entity = _mapper.MapModelToActivityRoleEntity(model);
             var toedit = _ctx.ActivityRoles.SingleOrDefault(a => a.ActivityRoleId == entity.ActivityRoleId);
+            if (toedit == null)
+                return BadRequest("Ruolo non trovato");
             toedit.Description = entity.Description;
 
             return _ctx.SaveChanges() > 0 ?
